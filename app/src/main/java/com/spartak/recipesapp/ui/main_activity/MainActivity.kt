@@ -1,7 +1,8 @@
-package com.spartak.recipesapp
+package com.spartak.recipesapp.ui.main_activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.spartak.recipesapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
