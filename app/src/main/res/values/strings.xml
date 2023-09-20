@@ -5,4 +5,13 @@
     <string name="chef">chef</string>
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
+    <string name="lets_cooking">Lets Cooking</string>
+    <string name="search_recipe">Search recipe</string>
+    <string name="category">Category</string>
+    <string name="view_all">View all</string>
+    <string name="trending">Trending</string>
+    <string name="popular">Popular</string>
+    <string name="recipe_image">recipe image</string>
+    <string name="hint">hint</string>
+    <string name="new_text">New</string>
 </resources>

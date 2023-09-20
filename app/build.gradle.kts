@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.spartak.recipesapp"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -48,4 +48,7 @@ dependencies {
     //navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.2")
+
+    //glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

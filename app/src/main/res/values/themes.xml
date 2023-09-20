@@ -29,5 +29,8 @@
         <item name="colorPrimaryInverse">@color/inversePrimary</item>
     </style>
 
-    <style name="Theme.RecipesApp" parent="Base.Theme.RecipesApp" />
+    <style name="Theme.RecipesApp" parent="Base.Theme.RecipesApp" >
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:fontFamily">@font/poppins_font</item>
+    </style>
 </resources>

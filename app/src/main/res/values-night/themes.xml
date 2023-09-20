@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="Base.Theme.RecipesApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/onPrimary</item>
@@ -27,7 +27,11 @@
         <item name="colorOnSurfaceInverse">@color/inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/inverseSurface</item>
         <item name="colorPrimaryInverse">@color/inversePrimary</item>
+
     </style>
 
-    <style name="Theme.RecipesApp" parent="Base.Theme.RecipesApp" />
+    <style name="Theme.RecipesApp" parent="Base.Theme.RecipesApp">
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:fontFamily">@font/poppins_font</item>
+    </style>
 </resources>

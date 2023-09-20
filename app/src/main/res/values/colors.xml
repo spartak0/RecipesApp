@@ -1,7 +1,7 @@
 
 <resources>
     <color name="seed">#D99651</color>
-    <color name="primary">#8B5000</color>
+    <color name="primary">#D99651</color>
     <color name="onPrimary">#FFFFFF</color>
     <color name="primaryContainer">#FFDCBE</color>
     <color name="onPrimaryContainer">#2D1600</color>
