@@ -7,14 +7,11 @@
     android:orientation="vertical"
     tools:context=".ui.main_screen.MainFragment">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/bottomNavigationFragmentContainer"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/bottomNavigationViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        app:defaultNavHost="false"
-        app:navGraph="@navigation/bottom_navigation_graph" />
+        android:layout_weight="1" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
