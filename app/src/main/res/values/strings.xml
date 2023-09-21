@@ -14,4 +14,7 @@
     <string name="recipe_image">recipe image</string>
     <string name="hint">hint</string>
     <string name="new_text">New</string>
+    <string name="saved_recype">Saved recype</string>
+    <string name="search_saved_recype">Search saved recype</string>
+    <string name="isSavedBtn">isSavedBtn</string>
 </resources>

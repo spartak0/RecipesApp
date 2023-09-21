@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.spartak.recipesapp.ui.favorite_screen.FavoriteFragment"
+        android:name="com.spartak.recipesapp.ui.saved_screen.SavedFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_saved" />
 </navigation>
