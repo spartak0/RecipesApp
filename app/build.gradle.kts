@@ -46,9 +46,12 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     //navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.2")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //view binding delegate
+    implementation("com.github.kirich1409:viewbindingpropertydelegate-full:1.5.9")
 }

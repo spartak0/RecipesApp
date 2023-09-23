@@ -32,5 +32,7 @@
     <style name="Theme.RecipesApp" parent="Base.Theme.RecipesApp" >
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:fontFamily">@font/poppins_font</item>
+        <item name="android:includeFontPadding">false</item>
+
     </style>
 </resources>

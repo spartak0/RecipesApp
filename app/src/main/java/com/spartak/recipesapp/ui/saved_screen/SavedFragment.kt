@@ -1,36 +1,30 @@
 package com.spartak.recipesapp.ui.saved_screen
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.spartak.recipesapp.R
 import com.spartak.recipesapp.databinding.FragmentSavedBinding
-import com.spartak.recipesapp.domain.model.Recype
-import com.spartak.recipesapp.ui.home_screen.RecypeAdapter
+import com.spartak.recipesapp.domain.model.Recipe
+import com.spartak.recipesapp.ui.home_screen.RecipeAdapter
 
-class SavedFragment : Fragment() {
-    private var _binding: FragmentSavedBinding? = null
-    private val binding get() = _binding!!
-    private var adapter: RecypeAdapter? = null
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSavedBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+class SavedFragment : Fragment(R.layout.fragment_saved) {
+    private val binding: FragmentSavedBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val layoutManager = LinearLayoutManager(requireContext())
-        adapter = RecypeAdapter(listOf(
-            Recype(0, "Spartal", "Cace", "https://i.stack.imgur.com/GsDIl.jpg"),
-            Recype(2, "Spartar", "Cace2", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGa804ujwQc2vYbvFAL--5238RpdCd4mPAcYNED7AmdA&s"),
-            Recype(3, "Spartav", "Cace3","https://i.stack.imgur.com/GsDIl.jpg"),
-        ))
-        binding.recypeSavedRecycler.layoutManager = layoutManager
-        binding.recypeSavedRecycler.adapter = adapter
+        with(binding.recyclerRecipes) {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = RecipeAdapter(
+                listOf(
+                    Recipe(0, "Spartal", "Cace", "https://i.stack.imgur.com/GsDIl.jpg"),
+                    Recipe(2, "Spartar", "Cace2", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGa804ujwQc2vYbvFAL--5238RpdCd4mPAcYNED7AmdA&s"),
+                    Recipe(3, "Spartav", "Cace3", "https://i.stack.imgur.com/GsDIl.jpg"),
+                )
+            )
+        }
     }
 
 }
