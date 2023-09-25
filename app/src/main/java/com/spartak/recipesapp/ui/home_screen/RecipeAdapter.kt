@@ -2,6 +2,7 @@ package com.spartak.recipesapp.ui.home_screen
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -9,10 +10,18 @@ import com.spartak.recipesapp.R
 import com.spartak.recipesapp.databinding.RecipeCardBinding
 import com.spartak.recipesapp.domain.model.Recipe
 
-class RecipeAdapter(private val list: List<Recipe>) :
+class RecipeAdapter(
+    private val list: List<Recipe>,
+    private val recipeItemOnClick: (Recipe) -> Unit
+) :
     RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
-    class RecipeHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view), OnClickListener {
         private val binding = RecipeCardBinding.bind(view)
+
+        init {
+            view.setOnClickListener(this)
+        }
+
         fun bind(recipe: Recipe) {
             with(binding) {
                 tvAuthor.text = recipe.author
@@ -21,6 +30,14 @@ class RecipeAdapter(private val list: List<Recipe>) :
             }
 
         }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                recipeItemOnClick(list[position])
+            }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeHolder {
@@ -33,6 +50,7 @@ class RecipeAdapter(private val list: List<Recipe>) :
     }
 
     override fun onBindViewHolder(holder: RecipeHolder, position: Int) {
-        holder.bind(list[position])
+        val recipe = list[position]
+        holder.bind(recipe)
     }
 }
