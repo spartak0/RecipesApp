@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_recipe"
+    style="@style/NoStrokeCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="6dp"
-    app:cardElevation="1dp"
-    app:cardCornerRadius="16.dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,9 +19,8 @@
             android:id="@+id/iv_recipe"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/recipe_image_background"
             android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,12 +53,12 @@
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/icon_btn_background"
+            android:contentDescription="@string/isSavedBtn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_recipe"
             app:srcCompat="@drawable/save"
-            app:tint="@color/primary"
-            android:contentDescription="@string/isSavedBtn"/>
+            app:tint="@color/primary" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
 

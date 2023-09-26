@@ -17,4 +17,6 @@
     <string name="saved_recype">Saved recype</string>
     <string name="search_saved_recype">Search saved recype</string>
     <string name="isSavedBtn">isSavedBtn</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="recipe">Recipe</string>
 </resources>

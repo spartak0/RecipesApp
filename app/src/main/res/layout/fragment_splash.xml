@@ -8,7 +8,7 @@
     tools:context=".ui.splash_screen.SplashFragment">
 
     <ImageView
-        android:id="@+id/imageView_background"
+        android:id="@+id/iv_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
