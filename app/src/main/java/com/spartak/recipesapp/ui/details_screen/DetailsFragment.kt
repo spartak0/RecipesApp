@@ -10,6 +10,7 @@ import com.spartak.recipesapp.R
 import com.spartak.recipesapp.databinding.FragmentDetailsBinding
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
+
     private val args: DetailsFragmentArgs by navArgs()
     private val binding: FragmentDetailsBinding by viewBinding()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

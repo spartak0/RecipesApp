@@ -38,7 +38,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved) {
                         "Aboba"
                     ),
                 )
-            ){recipe->
+            ) { recipe ->
                 val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipe)
                 findNavController().navigate(action)
             }
