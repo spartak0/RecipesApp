@@ -24,22 +24,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     Recipe(
                         0,
                         "Spartal",
-                        "Cace",
                         "https://i.stack.imgur.com/GsDIl.jpg",
-                        listOf("1", "3", "4"),
-                        "Aboba"
+                        false
                     ),
                     Recipe(
                         3,
                         "Spartav",
-                        "Cace3",
                         "https://i.stack.imgur.com/GsDIl.jpg",
-                        listOf("1", "2", "3"),
-                        "Aboba2"
+                        false
                     ),
                 )
-            ) { recipe ->
-                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipe)
+            ) { recipeId ->
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
                 findNavController().navigate(action)
             }
         }

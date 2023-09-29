@@ -12,7 +12,7 @@ import com.spartak.recipesapp.domain.model.Recipe
 
 class RecipeAdapter(
     private val list: List<Recipe>,
-    private val recipeItemOnClick: (Recipe) -> Unit
+    private val recipeItemOnClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
     inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view), OnClickListener {
@@ -24,7 +24,6 @@ class RecipeAdapter(
 
         fun bind(recipe: Recipe) {
             with(binding) {
-                tvAuthor.text = recipe.author
                 tvName.text = recipe.name
                 Glide.with(ivRecipe).load(recipe.image).into(ivRecipe)
             }
@@ -34,7 +33,7 @@ class RecipeAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                recipeItemOnClick(list[position])
+                recipeItemOnClick(position)
             }
         }
 

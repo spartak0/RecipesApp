@@ -24,18 +24,14 @@ class SavedFragment : Fragment(R.layout.fragment_saved) {
                     Recipe(
                         0,
                         "Spartal",
-                        "Cace",
                         "https://i.stack.imgur.com/GsDIl.jpg",
-                        listOf("1", "2", "3"),
-                        "Aboba"
+                        false,
                     ),
                     Recipe(
                         3,
                         "Spartav",
-                        "Cace3",
                         "https://i.stack.imgur.com/GsDIl.jpg",
-                        listOf("1", "2", "3"),
-                        "Aboba"
+                        false,
                     ),
                 )
             ) { recipe ->
