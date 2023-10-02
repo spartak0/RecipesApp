@@ -10,15 +10,13 @@ import retrofit2.http.Query
 interface RecipeApi {
     @GET(RECIPE_ENDPOINT)
     fun getRecipes(
-        @Query(API_KEY_PARAMETER) apiKey: String = API_KEY,
         @Query(INSTRUCTIONS_PARAMETER) instructionsRequired: Boolean = true,
     ): Observable<RecipeResponseDto>
 
     @GET(RECIPE_INFORMATION_ENDPOINT)
     fun getRecipeInformation(
-        @Query(API_KEY_PARAMETER) apiKey: String = API_KEY,
-        @Query(INCLUDE_NUTRITION_PARAMETER) includeNutrition: Boolean = false,
         @Path(ID_PARAMETER) id: Int,
+        @Query(INCLUDE_NUTRITION_PARAMETER) includeNutrition: Boolean = false,
     ): Observable<RecipeInformationDto>
 
     companion object {

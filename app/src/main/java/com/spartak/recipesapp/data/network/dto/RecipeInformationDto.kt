@@ -3,14 +3,14 @@ package com.spartak.recipesapp.data.network.dto
 import com.google.gson.annotations.SerializedName
 
 data class RecipeInformationDto(
-    val id: Int,
-    val title: String,
-    val image: String,
-    val instruction:String,
+    val id: Int?,
+    val title: String?,
+    val image: String?,
+    val instructions: String?,
     @SerializedName(INGREDIENTS_NAME)
-    val ingredients: List<IngredientDto>
-){
-    companion object{
+    val ingredients: List<IngredientDto>?
+) {
+    companion object {
         private const val INGREDIENTS_NAME = "extendedIngredients"
     }
 }

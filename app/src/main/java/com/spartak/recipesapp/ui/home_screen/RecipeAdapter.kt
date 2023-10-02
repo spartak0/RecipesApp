@@ -1,5 +1,6 @@
 package com.spartak.recipesapp.ui.home_screen
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -11,7 +12,7 @@ import com.spartak.recipesapp.databinding.RecipeCardBinding
 import com.spartak.recipesapp.domain.model.Recipe
 
 class RecipeAdapter(
-    private val list: List<Recipe>,
+    private val list: MutableList<Recipe> = mutableListOf(),
     private val recipeItemOnClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
@@ -33,10 +34,16 @@ class RecipeAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                recipeItemOnClick(position)
+                recipeItemOnClick(list[position].id)
             }
         }
+    }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(newList: List<Recipe>){
+        list.clear()
+        list.addAll(newList)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeHolder {

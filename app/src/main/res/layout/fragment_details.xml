@@ -46,27 +46,29 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_ingredientsTitle" />
 
         <TextView
-            android:id="@+id/tv_recipeTitle"
+            android:id="@+id/tv_instructionsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="@string/recipe"
+            android:text="@string/instructions"
             android:textFontWeight="700"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_ingredient" />
 
         <TextView
-            android:id="@+id/tv_recipe"
+            android:id="@+id/tv_instructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:hint="@string/hint"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recipeTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_instructionsTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

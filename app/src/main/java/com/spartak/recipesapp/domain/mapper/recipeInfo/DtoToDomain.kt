@@ -5,18 +5,18 @@ import com.spartak.recipesapp.data.network.dto.RecipeInformationDto
 import com.spartak.recipesapp.domain.model.Ingredient
 import com.spartak.recipesapp.domain.model.RecipeInfo
 
-fun RecipeInfo.toDto() = with(this) {
-    RecipeInformationDto(
-        id = id,
-        title = title,
-        ingredients = ingredients.map(Ingredient::toDto),
-        image = image,
-        instruction = instruction,
+fun RecipeInformationDto.toDomain() = with(this) {
+    RecipeInfo(
+        id = id ?: 0,
+        title = title ?: "",
+        image = image ?: "",
+        instructions = instructions ?: "",
+        ingredients = ingredients?.map(IngredientDto::toDomain) ?: listOf(),
     )
 }
 
-fun Ingredient.toDto() = with(this) {
-    IngredientDto(
+fun IngredientDto.toDomain() = with(this) {
+    Ingredient(
         id = id,
         name = name,
         original = original,

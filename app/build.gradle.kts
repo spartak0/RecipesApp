@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
     id("androidx.navigation.safeargs")
+    id("kotlin-kapt")
 }
 
 android {
@@ -64,4 +64,9 @@ dependencies {
 
     //rxJava
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+    implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+
+    //dagger
+    implementation("com.google.dagger:dagger:2.48")
+    kapt("com.google.dagger:dagger-compiler:2.48")
 }
