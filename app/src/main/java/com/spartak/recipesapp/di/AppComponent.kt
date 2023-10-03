@@ -5,7 +5,7 @@ import com.spartak.recipesapp.ui.home_screen.HomeFragment
 import dagger.Component
 
 @Component(modules = [AppModule::class])
-interface  AppComponent {
+interface AppComponent {
     fun inject(homeFragment: HomeFragment)
     fun inject(detailsFragment: DetailsFragment)
 }

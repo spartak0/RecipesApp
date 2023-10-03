@@ -29,8 +29,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
-        viewModel.fetchRecipeInfo(args.recipeId)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.fetchRecipeInfo(args.recipeId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,7 +42,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         viewModel.recipeInfo.observe(viewLifecycleOwner) { recipeInfo ->
             with(binding) {
                 tvIngredient.text =
-                    recipeInfo.ingredients.joinToString(separator = ",\n", postfix = ".") { "${it.name} - ${it.amount.withoutPostfix()} ${it.unit}" }
+                    recipeInfo.ingredients.joinToString(
+                        separator = ",\n", postfix = "."
+                    ) {
+                        "${it.name} - ${it.amount.withoutPostfix()} ${it.unit}"
+                    }
                 tvInstructions.text = recipeInfo.instructions
                 Glide.with(ivRecipe).load(recipeInfo.image).into(ivRecipe)
             }

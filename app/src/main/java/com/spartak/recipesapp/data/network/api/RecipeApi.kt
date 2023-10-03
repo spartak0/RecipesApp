@@ -11,6 +11,7 @@ interface RecipeApi {
     @GET(RECIPE_ENDPOINT)
     fun getRecipes(
         @Query(INSTRUCTIONS_PARAMETER) instructionsRequired: Boolean = true,
+        @Query(SORT_PARAMETER) sort: String = "",
     ): Observable<RecipeResponseDto>
 
     @GET(RECIPE_INFORMATION_ENDPOINT)
@@ -28,5 +29,6 @@ interface RecipeApi {
         const val INSTRUCTIONS_PARAMETER = "instructionsRequired"
         const val INCLUDE_NUTRITION_PARAMETER = "includeNutrition"
         const val ID_PARAMETER = "id"
+        const val SORT_PARAMETER = "sort"
     }
 }

@@ -16,6 +16,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUi()
+    }
+
+    private fun setupUi() {
         val viewPagerAdapter = AdapterViewPager(this, fragmentList)
         with(binding.container) {
             adapter = viewPagerAdapter

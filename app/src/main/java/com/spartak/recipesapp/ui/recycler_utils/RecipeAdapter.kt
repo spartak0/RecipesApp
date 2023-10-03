@@ -1,10 +1,10 @@
-package com.spartak.recipesapp.ui.home_screen
+package com.spartak.recipesapp.ui.recycler_utils
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.spartak.recipesapp.R
@@ -14,8 +14,8 @@ import com.spartak.recipesapp.domain.model.Recipe
 class RecipeAdapter(
     private val list: MutableList<Recipe> = mutableListOf(),
     private val recipeItemOnClick: (Int) -> Unit
-) :
-    RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
+) : RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
+
     inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view), OnClickListener {
         private val binding = RecipeCardBinding.bind(view)
 
@@ -39,11 +39,13 @@ class RecipeAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun update(newList: List<Recipe>){
+
+    fun update(newList: List<Recipe>) {
+        val diffCallback = RecipeDiffUtilCallback(list, newList)
+        val diffRecipes = DiffUtil.calculateDiff(diffCallback)
         list.clear()
         list.addAll(newList)
-        notifyDataSetChanged()
+        diffRecipes.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeHolder {
