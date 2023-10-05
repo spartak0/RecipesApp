@@ -1,34 +1,26 @@
 package com.spartak.recipesapp.ui.home_screen
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.spartak.recipesapp.domain.model.Recipe
 import com.spartak.recipesapp.domain.model.SortRecipes
 import com.spartak.recipesapp.domain.repository.RecipeRepository
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.spartak.recipesapp.ui.DisposableViewModel
 import javax.inject.Inject
 
 
 class HomeViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
-) : ViewModel() {
-    private val disposable = CompositeDisposable()
+) : DisposableViewModel() {
 
     private val _recipes = MutableLiveData<List<Recipe>>(listOf())
     val recipes = _recipes
 
     fun fetchRecipe(sortRecipes: SortRecipes) {
-        disposable.add(
-            recipeRepository.getRecipes(sortRecipes)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { _recipes.value = it },
-                    Throwable::printStackTrace
-                )
-        )
+        recipeRepository.getRecipes(sortRecipes)
+            .applySchedulers(
+                { _recipes.value = it },
+                Throwable::printStackTrace
+            )
     }
 
 }

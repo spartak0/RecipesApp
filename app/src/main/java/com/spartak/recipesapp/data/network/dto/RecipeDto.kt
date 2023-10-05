@@ -7,8 +7,8 @@ data class RecipeResponseDto(
     val number: Int?,
     @SerializedName(RESULTS_NAME)
     val recipes: List<RecipeDto>?,
-){
-    companion object{
+) {
+    companion object {
         private const val RESULTS_NAME = "results"
     }
 }

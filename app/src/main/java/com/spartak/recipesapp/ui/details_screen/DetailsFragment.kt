@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.spartak.recipesapp.R
 import com.spartak.recipesapp.app.appComponent
 import com.spartak.recipesapp.databinding.FragmentDetailsBinding
-import com.spartak.recipesapp.utils.withoutPostfix
 import javax.inject.Inject
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
@@ -39,14 +38,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupObservables()
+    }
+
+    private fun setupObservables() {
         viewModel.recipeInfo.observe(viewLifecycleOwner) { recipeInfo ->
             with(binding) {
                 tvIngredient.text =
-                    recipeInfo.ingredients.joinToString(
-                        separator = ",\n", postfix = "."
-                    ) {
-                        "${it.name} - ${it.amount.withoutPostfix()} ${it.unit}"
-                    }
+                    recipeInfo.ingredients.joinStringColumn()
                 tvInstructions.text = recipeInfo.instructions
                 Glide.with(ivRecipe).load(recipeInfo.image).into(ivRecipe)
             }
