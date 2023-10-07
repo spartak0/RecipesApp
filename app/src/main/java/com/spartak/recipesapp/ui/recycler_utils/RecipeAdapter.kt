@@ -1,9 +1,10 @@
-package com.spartak.recipesapp.ui.home_screen
+package com.spartak.recipesapp.ui.recycler_utils
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.spartak.recipesapp.R
@@ -11,10 +12,10 @@ import com.spartak.recipesapp.databinding.RecipeCardBinding
 import com.spartak.recipesapp.domain.model.Recipe
 
 class RecipeAdapter(
-    private val list: List<Recipe>,
-    private val recipeItemOnClick: (Recipe) -> Unit
-) :
-    RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
+    private val list: MutableList<Recipe> = mutableListOf(),
+    private val recipeItemOnClick: (Int) -> Unit
+) : RecyclerView.Adapter<RecipeAdapter.RecipeHolder>() {
+
     inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view), OnClickListener {
         private val binding = RecipeCardBinding.bind(view)
 
@@ -24,7 +25,6 @@ class RecipeAdapter(
 
         fun bind(recipe: Recipe) {
             with(binding) {
-                tvAuthor.text = recipe.author
                 tvName.text = recipe.name
                 Glide.with(ivRecipe).load(recipe.image).into(ivRecipe)
             }
@@ -34,10 +34,18 @@ class RecipeAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                recipeItemOnClick(list[position])
+                recipeItemOnClick(list[position].id)
             }
         }
+    }
 
+
+    fun update(newList: List<Recipe>) {
+        val diffCallback = RecipeDiffUtilCallback(list, newList)
+        val diffRecipes = DiffUtil.calculateDiff(diffCallback)
+        list.clear()
+        list.addAll(newList)
+        diffRecipes.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeHolder {
