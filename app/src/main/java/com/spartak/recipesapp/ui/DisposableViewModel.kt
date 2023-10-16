@@ -18,10 +18,11 @@ open class DisposableViewModel : ViewModel() {
 
     fun <T : Any> Observable<T>.applySchedulers(
         onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit,
+        onError: (Throwable) -> Unit = {},
+        onComplete: () -> Unit = {},
     ) = this.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(onNext, onError)
+        .subscribe(onNext, onError, onComplete)
         .addToContainer()
 
     private fun Disposable.addToContainer() = disposable.add(this)

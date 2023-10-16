@@ -17,14 +17,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
-            val v = currentFocus
-            if (v is EditText) {
+            val currentFocus = currentFocus
+            if (currentFocus is EditText) {
                 val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
+                currentFocus.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
+                    currentFocus.clearFocus()
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                    imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0)
                 }
             }
         }

@@ -8,10 +8,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RecipeApi {
+
     @GET(RECIPE_ENDPOINT)
     fun getRecipes(
         @Query(INSTRUCTIONS_PARAMETER) instructionsRequired: Boolean = true,
         @Query(SORT_PARAMETER) sort: String = "",
+        @Query(NUMBER_PARAMETER) number: Int = MAX_PAGE_SIZE_VALUE,
+        @Query(OFFSET_PARAMETER) offset: Int = 0,
     ): Observable<RecipeResponseDto>
 
     @GET(RECIPE_INFORMATION_ENDPOINT)
@@ -23,12 +26,15 @@ interface RecipeApi {
     companion object {
         const val BASE_URL = "https://api.spoonacular.com/"
         const val API_KEY = "d40af269b2874f2bbf159b77c3ba7cb6"
-        const val RECIPE_ENDPOINT = "recipes/complexSearch"
-        const val RECIPE_INFORMATION_ENDPOINT = "recipes/{id}/information"
         const val API_KEY_PARAMETER = "apiKey"
-        const val INSTRUCTIONS_PARAMETER = "instructionsRequired"
-        const val INCLUDE_NUTRITION_PARAMETER = "includeNutrition"
-        const val ID_PARAMETER = "id"
-        const val SORT_PARAMETER = "sort"
+        const val MAX_PAGE_SIZE_VALUE: Int = 10
+        private const val RECIPE_ENDPOINT = "recipes/complexSearch"
+        private const val RECIPE_INFORMATION_ENDPOINT = "recipes/{id}/information"
+        private const val INSTRUCTIONS_PARAMETER = "instructionsRequired"
+        private const val INCLUDE_NUTRITION_PARAMETER = "includeNutrition"
+        private const val ID_PARAMETER = "id"
+        private const val SORT_PARAMETER = "sort"
+        private const val NUMBER_PARAMETER = "number"
+        private const val OFFSET_PARAMETER = "offset"
     }
 }
