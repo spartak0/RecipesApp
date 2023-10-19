@@ -1,8 +1,8 @@
-package com.spartak.recipesapp.ui.recycler_utils
+package com.spartak.recipesapp.ui.recycler_utils.paging
 
+import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,32 +11,39 @@ import com.spartak.recipesapp.R
 import com.spartak.recipesapp.databinding.RecipeCardBinding
 import com.spartak.recipesapp.domain.model.Recipe
 
-class RecipeAdapter(
-    private val recipeItemOnClick: (Int) -> Unit
-) : PagingDataAdapter<Recipe, RecipeAdapter.RecipeHolder>(RecipeDiffUtilItemCallback) {
+class RecipePagingAdapter(
+    private val recipeItemOnClick: (Int) -> Unit,
+    private val isFavoriteOnClick: (Recipe, View) -> Unit,
+) : PagingDataAdapter<Recipe, RecipePagingAdapter.RecipeHolder>(RecipeDiffUtilItemCallback) {
 
-    inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view), OnClickListener {
+    inner class RecipeHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = RecipeCardBinding.bind(view)
-
-        init {
-            view.setOnClickListener(this)
-        }
 
         fun bind(recipe: Recipe) {
             with(binding) {
                 tvName.text = recipe.name
                 Glide.with(ivRecipe).load(recipe.image).into(ivRecipe)
+                btnFavorite.setImageIcon(
+                    Icon.createWithResource(
+                        binding.root.context.applicationContext,
+                        if (recipe.isFavorite) R.drawable.save_filled else R.drawable.save
+                    )
+                )
             }
+            setupListeners(recipe)
         }
 
-        override fun onClick(v: View?) {
-            val position = bindingAdapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                getItem(position)?.let {
-                    recipeItemOnClick(it.id)
+        private fun setupListeners(recipe: Recipe) {
+            with(binding) {
+                ivRecipe.setOnClickListener {
+                    recipeItemOnClick(recipe.id)
+                }
+                btnFavorite.setOnClickListener {
+                    isFavoriteOnClick(recipe, it)
                 }
             }
         }
+
     }
 
     override fun onBindViewHolder(holder: RecipeHolder, position: Int) {

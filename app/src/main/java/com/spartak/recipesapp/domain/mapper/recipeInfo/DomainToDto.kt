@@ -13,7 +13,7 @@ fun RecipeInfo.toDto() = with(this) {
         title = title,
         ingredients = ingredients.map(Ingredient::toDto),
         image = image,
-        instructions = instructions,
+        instructions = instruction,
     )
 }
 
@@ -22,7 +22,6 @@ fun Ingredient.toDto() = with(this) {
         id = id,
         name = name,
         original = original,
-        image = image,
         amount = amount,
         unit = unit,
     )
