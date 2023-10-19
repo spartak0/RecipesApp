@@ -17,11 +17,12 @@ class FavoriteViewModel @Inject constructor(
     init {
         fetchFavoriteRecipes()
     }
+
     private fun fetchFavoriteRecipes() {
         recipeRepository.getFavoriteRecipes()
             .applySchedulers(onNext = {
-            _favoriteRecipes.value = it
-        })
+                _favoriteRecipes.value = it
+            })
     }
 
     fun existRecipe(id: Int, onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) =

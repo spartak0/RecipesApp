@@ -1,5 +1,6 @@
 package com.spartak.recipesapp.data.paging
 
+import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.spartak.recipesapp.data.database.dao.RecipeDao
@@ -34,15 +35,35 @@ class RecipePagingSource @AssistedInject constructor(
             sort = sortRecipes.value, offset = offsetValue, number = pageSize
         )
 
-        return response.single(RecipeResponseDto()).subscribeOn(Schedulers.io())
-            .map { recipeResponseDto ->
-                recipeResponseDto.recipes?.map {
-                    if (recipeDao.existsFavorite(it.id).blockingGet()) {
-                        it.toDomain().copy(isFavorite = true)
-                    } else it.toDomain()
-                } ?: listOf()
-            }.map { toLoadResult(it, pageNumber) }.onErrorReturn { LoadResult.Error(it) }
+        return response.single(RecipeResponseDto())
+            .flatMap(::checkIsFavorite)
+            .map { toLoadResult(it, pageNumber) }
+            .onErrorReturn { LoadResult.Error(it) }
     }
+
+    private fun checkIsFavorite(recipeResponseDto: RecipeResponseDto) =
+        Single.create<List<Recipe>> { emitter ->
+            val recipes = mutableListOf<Recipe>()
+            val tasks = recipeResponseDto.recipes?.map {
+                recipeDao.existsFavorite(it.id).map { exists ->
+                    if (exists) it.toDomain().copy(isFavorite = true) else it.toDomain()
+                }
+            } ?: listOf()
+            val disposable = Single.merge(tasks)
+                .subscribeOn(Schedulers.io())
+                .take(recipeResponseDto.recipes?.size?.toLong() ?: 0)
+                .subscribe(
+                    { recipes.add(it) },
+                    {
+                        Log.e("TAG", "loadSingle: $it")
+                        emitter.onError(it)
+                    },
+                    { emitter.onSuccess(recipes) }
+                )
+            emitter.setCancellable {
+                disposable.dispose()
+            }
+        }
 
     private fun toLoadResult(recipes: List<Recipe>, pageNumber: Int): LoadResult<Int, Recipe> {
         val nextPageNumber = if (recipes.isEmpty()) null else pageNumber + 1

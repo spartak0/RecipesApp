@@ -2,14 +2,12 @@ package com.spartak.recipesapp.ui.home_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
-import androidx.paging.map
 import com.spartak.recipesapp.domain.model.Recipe
 import com.spartak.recipesapp.domain.model.SortRecipes
 import com.spartak.recipesapp.domain.repository.RecipeRepository
@@ -35,12 +33,12 @@ class HomeViewModel @Inject constructor(
             newPager(it).liveData
         }
             .cachedIn(this)
-            .map { pagingData ->
-                pagingData.map { recipe ->
-                    if (favoriteRecipes.value?.contains(recipe) == true) recipe.copy(isFavorite = true)
-                    else recipe.copy(isFavorite = false)
-                }
-            }
+//            .map { pagingData ->
+//                pagingData.map { recipe ->
+//                    if (favoriteRecipes.value?.contains(recipe) == true) recipe.copy(isFavorite = true)
+//                    else recipe.copy(isFavorite = false)
+//                }
+//            }
 
     init {
         subscribeFavoriteRecipes()

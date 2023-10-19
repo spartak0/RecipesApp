@@ -72,12 +72,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
                 when (it) {
                     false -> {
                         viewModel.addRecipeInDb(recipe.copy(isFavorite = true))
-                        view.setImageIcon(
-                            Icon.createWithResource(
-                                context?.applicationContext,
-                                R.drawable.save_filled
-                            )
-                        )
+                        view.setImageResource(R.drawable.save_filled)
                     }
 
                     true -> {
