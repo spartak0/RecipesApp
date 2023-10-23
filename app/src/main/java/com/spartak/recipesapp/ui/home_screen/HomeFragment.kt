@@ -3,6 +3,7 @@ package com.spartak.recipesapp.ui.home_screen
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,9 +17,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.spartak.recipesapp.R
 import com.spartak.recipesapp.app.appComponent
 import com.spartak.recipesapp.databinding.FragmentHomeBinding
+import com.spartak.recipesapp.domain.model.Recipe
 import com.spartak.recipesapp.domain.model.SortRecipes
 import com.spartak.recipesapp.ui.main_screen.MainFragmentDirections
-import com.spartak.recipesapp.ui.recycler_utils.RecipeAdapter
+import com.spartak.recipesapp.ui.recycler_utils.paging.RecipePagingAdapter
 import javax.inject.Inject
 
 
@@ -31,11 +33,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels() {
         viewModelFactory
     }
-    private val recipeAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        RecipeAdapter { recipeId ->
-            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
-            findNavController().navigate(action)
-        }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.recipes.value?.let { recipePagingAdapter.submitData(lifecycle, it) }
+    }
+
+    private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        RecipePagingAdapter(
+            recipeItemOnClick = { recipeId ->
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
+                findNavController().navigate(action)
+            },
+            isFavoriteOnClick = { recipe, view ->
+                isFavoriteOnClick(recipe, view as ImageView)
+            },
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -55,7 +68,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             btnGroupCategory.setOnCheckedChangeListener { _, checkedId ->
                 viewModel.setSortRecipes(getSortRecipesByBtnId(checkedId))
             }
-            recipeAdapter.addLoadStateListener { loadStates: CombinedLoadStates ->
+            recipePagingAdapter.addLoadStateListener { loadStates: CombinedLoadStates ->
                 val refreshState = loadStates.refresh
                 when (refreshState) {
                     is LoadState.Error -> {
@@ -66,6 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         ).show()
                         viewModel.setIsLoading(true)
                     }
+
                     else -> viewModel.setIsLoading(refreshState == LoadState.Loading)
                 }
             }
@@ -76,19 +90,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupUI() {
         with(binding.rvRecipes) {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = recipeAdapter
+            adapter = recipePagingAdapter
         }
     }
 
     private fun setupObservables() {
         with(binding) {
             viewModel.recipes.observe(viewLifecycleOwner) {
-                (rvRecipes.adapter as RecipeAdapter).submitData(lifecycle, it)
+                (rvRecipes.adapter as RecipePagingAdapter).submitData(lifecycle, it)
+
             }
             viewModel.isLoading.observe(viewLifecycleOwner) {
                 rvRecipes.isVisible = !it
                 pbRecipes.isVisible = it
             }
+            viewModel.favoriteRecipes.observe(viewLifecycleOwner) { _ ->
+                (rvRecipes.adapter as RecipePagingAdapter).refresh()
+            }
+
         }
 
     }
@@ -103,4 +122,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+    private fun isFavoriteOnClick(recipe: Recipe, view: ImageView) {
+        viewModel.existRecipe(
+            recipe.id,
+            onSuccess = {
+                when (it) {
+                    false -> {
+                        viewModel.addRecipeInDb(recipe.copy(isFavorite = true))
+                        view.setImageResource(R.drawable.save_filled)
+                    }
+
+                    true -> {
+                        viewModel.deleteRecipeInDb(recipe)
+                        view.setImageResource(R.drawable.save)
+                    }
+                }
+            },
+            onError = {},
+        )
+    }
 }

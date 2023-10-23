@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.spartak.recipesapp.ui.MultiViewModelFactory
 import com.spartak.recipesapp.ui.details_screen.DetailsViewModel
+import com.spartak.recipesapp.ui.favorite_screen.FavoriteViewModel
 import com.spartak.recipesapp.ui.home_screen.HomeViewModel
 import dagger.Binds
 import dagger.Module
@@ -22,5 +23,9 @@ interface ViewModelBinds {
     @Binds
     @[IntoMap ViewModelKey(DetailsViewModel::class)]
     fun provideDetailsViewModel(detailsViewModel: DetailsViewModel): ViewModel
+
+    @Binds
+    @[IntoMap ViewModelKey(FavoriteViewModel::class)]
+    fun provideFavoriteViewModel(favoriteViewModel: FavoriteViewModel): ViewModel
 
 }

@@ -8,11 +8,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.spartak.recipesapp.R
 import com.spartak.recipesapp.databinding.FragmentMainBinding
 import com.spartak.recipesapp.ui.home_screen.HomeFragment
-import com.spartak.recipesapp.ui.saved_screen.SavedFragment
+import com.spartak.recipesapp.ui.favorite_screen.FavoriteFragment
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
-    private val fragmentList = listOf(HomeFragment(), SavedFragment())
+    private val fragmentList = listOf(HomeFragment(), FavoriteFragment())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

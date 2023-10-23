@@ -46,7 +46,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             with(binding) {
                 tvIngredient.text =
                     recipeInfo.ingredients.joinStringColumn()
-                tvInstructions.text = recipeInfo.instructions
+                tvInstructions.text = recipeInfo.instruction
                 Glide.with(ivRecipe).load(recipeInfo.image).into(ivRecipe)
             }
         }

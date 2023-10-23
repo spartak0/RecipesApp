@@ -5,14 +5,13 @@ data class RecipeInfo(
     val title:String,
     val image: String,
     val ingredients: List<Ingredient>,
-    val instructions: String,
+    val instruction: String,
     )
 
 data class Ingredient(
     val id: Int,
     val name: String,
     val original: String,
-    val image: String,
     val amount: Double,
     val unit: String,
 )

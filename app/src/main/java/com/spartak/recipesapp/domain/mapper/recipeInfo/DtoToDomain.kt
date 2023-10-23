@@ -10,7 +10,7 @@ fun RecipeInformationDto.toDomain() = with(this) {
         id = id ?: 0,
         title = title ?: "",
         image = image ?: "",
-        instructions = instructions ?: "",
+        instruction = instructions ?: "",
         ingredients = ingredients?.map(IngredientDto::toDomain) ?: listOf(),
     )
 }
@@ -20,7 +20,6 @@ fun IngredientDto.toDomain() = with(this) {
         id = id,
         name = name,
         original = original,
-        image = image,
         amount = amount,
         unit = unit,
     )

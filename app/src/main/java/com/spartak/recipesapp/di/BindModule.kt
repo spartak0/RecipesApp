@@ -1,6 +1,6 @@
 package com.spartak.recipesapp.di
 
-import com.spartak.recipesapp.data.network.repository.RecipeRepositoryImpl
+import com.spartak.recipesapp.data.repository.RecipeRepositoryImpl
 import com.spartak.recipesapp.domain.repository.RecipeRepository
 import dagger.Binds
 import dagger.Module

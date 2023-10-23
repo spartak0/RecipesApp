@@ -1,4 +1,4 @@
-package com.spartak.recipesapp.ui.recycler_utils
+package com.spartak.recipesapp.ui.recycler_utils.paging
 
 import androidx.recyclerview.widget.DiffUtil
 import com.spartak.recipesapp.domain.model.Recipe

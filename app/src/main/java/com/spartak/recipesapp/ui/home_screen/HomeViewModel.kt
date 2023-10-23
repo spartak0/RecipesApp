@@ -20,15 +20,30 @@ class HomeViewModel @Inject constructor(
 ) : DisposableViewModel() {
 
     private val _sortRecipes: MutableLiveData<SortRecipes> = MutableLiveData(SortRecipes.NONE)
-    val sortRecipes = _sortRecipes
+    private val sortRecipes: LiveData<SortRecipes> = _sortRecipes
+
+    private val _isLoading = MutableLiveData(false)
+    val isLoading = _isLoading
+
+    private val _favoriteRecipes: MutableLiveData<List<Recipe>> = MutableLiveData()
+    val favoriteRecipes: LiveData<List<Recipe>> = _favoriteRecipes
 
     val recipes: LiveData<PagingData<Recipe>> =
         sortRecipes.switchMap {
             newPager(it).liveData
-        }.cachedIn(this)
+        }
+            .cachedIn(this)
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading = _isLoading
+    init {
+        subscribeFavoriteRecipes()
+    }
+
+    private fun subscribeFavoriteRecipes() {
+        recipeRepository.getFavoriteRecipes()
+            .applySchedulers(onNext = {
+                _favoriteRecipes.value = it
+            })
+    }
 
     private fun newPager(sort: SortRecipes): Pager<Int, Recipe> {
         return Pager(config = PagingConfig(PREFETCH_PAGE_SIZE, enablePlaceholders = false)) {
@@ -43,6 +58,21 @@ class HomeViewModel @Inject constructor(
     fun setIsLoading(isLoading: Boolean) {
         _isLoading.postValue(isLoading)
     }
+
+    fun addRecipeInDb(recipe: Recipe) {
+        recipeRepository.addFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    }
+
+    fun deleteRecipeInDb(recipe: Recipe) {
+        recipeRepository.deleteFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    }
+
+    fun existRecipe(id: Int, onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) =
+        recipeRepository.isFavoriteRecipe(id)
+            .applySchedulers(
+                onSuccess = onSuccess,
+                onError = onError,
+            )
 
     companion object {
         private const val PREFETCH_PAGE_SIZE = 5
