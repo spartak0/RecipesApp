@@ -1,7 +1,6 @@
 package com.spartak.recipesapp.ui.favorite_screen
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -77,12 +76,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
 
                     true -> {
                         viewModel.deleteRecipeInDb(recipe)
-                        view.setImageIcon(
-                            Icon.createWithResource(
-                                context?.applicationContext,
-                                R.drawable.save
-                            )
-                        )
+                        view.setImageResource(R.drawable.save)
                     }
                 }
             },

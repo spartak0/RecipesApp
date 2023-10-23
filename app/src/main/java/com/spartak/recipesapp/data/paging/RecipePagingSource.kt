@@ -1,6 +1,5 @@
 package com.spartak.recipesapp.data.paging
 
-import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.spartak.recipesapp.data.database.dao.RecipeDao
@@ -55,7 +54,6 @@ class RecipePagingSource @AssistedInject constructor(
                 .subscribe(
                     { recipes.add(it) },
                     {
-                        Log.e("TAG", "loadSingle: $it")
                         emitter.onError(it)
                     },
                     { emitter.onSuccess(recipes) }

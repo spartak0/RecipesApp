@@ -33,12 +33,6 @@ class HomeViewModel @Inject constructor(
             newPager(it).liveData
         }
             .cachedIn(this)
-//            .map { pagingData ->
-//                pagingData.map { recipe ->
-//                    if (favoriteRecipes.value?.contains(recipe) == true) recipe.copy(isFavorite = true)
-//                    else recipe.copy(isFavorite = false)
-//                }
-//            }
 
     init {
         subscribeFavoriteRecipes()
@@ -79,14 +73,6 @@ class HomeViewModel @Inject constructor(
                 onSuccess = onSuccess,
                 onError = onError,
             )
-
-    fun isFavorite() {
-        recipeRepository.getFavoriteRecipes().applySchedulers(
-            onNext = {
-
-            }
-        )
-    }
 
     companion object {
         private const val PREFETCH_PAGE_SIZE = 5

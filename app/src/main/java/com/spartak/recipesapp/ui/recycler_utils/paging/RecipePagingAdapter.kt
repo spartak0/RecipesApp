@@ -1,6 +1,5 @@
 package com.spartak.recipesapp.ui.recycler_utils.paging
 
-import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +22,8 @@ class RecipePagingAdapter(
             with(binding) {
                 tvName.text = recipe.name
                 Glide.with(ivRecipe).load(recipe.image).into(ivRecipe)
-                btnFavorite.setImageIcon(
-                    Icon.createWithResource(
-                        binding.root.context.applicationContext,
-                        if (recipe.isFavorite) R.drawable.save_filled else R.drawable.save
-                    )
+                btnFavorite.setImageResource(
+                    if (recipe.isFavorite) R.drawable.save_filled else R.drawable.save
                 )
             }
             setupListeners(recipe)

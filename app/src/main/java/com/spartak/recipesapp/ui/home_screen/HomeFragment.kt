@@ -1,7 +1,6 @@
 package com.spartak.recipesapp.ui.home_screen
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -33,6 +32,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels() {
         viewModelFactory
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.recipes.value?.let { recipePagingAdapter.submitData(lifecycle, it) }
     }
 
     private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
@@ -83,11 +87,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.recipes.value?.let { recipePagingAdapter.submitData(lifecycle, it) }
-    }
-
     private fun setupUI() {
         with(binding.rvRecipes) {
             layoutManager = LinearLayoutManager(requireContext())
@@ -105,7 +104,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 rvRecipes.isVisible = !it
                 pbRecipes.isVisible = it
             }
-            viewModel.favoriteRecipes.observe(viewLifecycleOwner) { list ->
+            viewModel.favoriteRecipes.observe(viewLifecycleOwner) { _ ->
                 (rvRecipes.adapter as RecipePagingAdapter).refresh()
             }
 
@@ -130,22 +129,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 when (it) {
                     false -> {
                         viewModel.addRecipeInDb(recipe.copy(isFavorite = true))
-                        view.setImageIcon(
-                            Icon.createWithResource(
-                                context?.applicationContext,
-                                R.drawable.save_filled
-                            )
-                        )
+                        view.setImageResource(R.drawable.save_filled)
                     }
 
                     true -> {
                         viewModel.deleteRecipeInDb(recipe)
-                        view.setImageIcon(
-                            Icon.createWithResource(
-                                context?.applicationContext,
-                                R.drawable.save
-                            )
-                        )
+                        view.setImageResource(R.drawable.save)
                     }
                 }
             },
