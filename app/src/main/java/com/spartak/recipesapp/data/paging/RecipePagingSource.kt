@@ -18,6 +18,7 @@ class RecipePagingSource @AssistedInject constructor(
     private val recipeApi: RecipeApi,
     private val recipeDao: RecipeDao,
     @Assisted(SORT_RECIPE_PARAMETER) private val sortRecipes: SortRecipes,
+    @Assisted(SEARCH_TITLE_PARAMETER) private val searchTitle: String = "",
 ) : RxPagingSource<Int, Recipe>() {
 
     override fun getRefreshKey(state: PagingState<Int, Recipe>): Int? {
@@ -30,8 +31,15 @@ class RecipePagingSource @AssistedInject constructor(
         val pageNumber = params.key ?: INITIAL_PAGE_NUMBER
         val offsetValue = pageNumber * RecipeApi.MAX_PAGE_SIZE_VALUE
         val pageSize = params.loadSize.coerceAtMost(RecipeApi.MAX_PAGE_SIZE_VALUE)
-        val response = recipeApi.getRecipes(
-            sort = sortRecipes.value, offset = offsetValue, number = pageSize
+        val response = if (searchTitle.isBlank())
+            recipeApi.getRecipes(
+                sort = sortRecipes.value, offset = offsetValue, number = pageSize,
+            )
+        else recipeApi.searchRecipes(
+            titleMatch = searchTitle,
+            sort = sortRecipes.value,
+            offset = offsetValue,
+            number = pageSize,
         )
 
         return response.single(RecipeResponseDto())
@@ -72,11 +80,15 @@ class RecipePagingSource @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
 
-        fun create(@Assisted(SORT_RECIPE_PARAMETER) sortRecipes: SortRecipes): RecipePagingSource
+        fun create(
+            @Assisted(SORT_RECIPE_PARAMETER) sortRecipes: SortRecipes = SortRecipes.NONE,
+            @Assisted(SEARCH_TITLE_PARAMETER) searchTitle: String = "",
+        ): RecipePagingSource
     }
 
     companion object {
         const val INITIAL_PAGE_NUMBER = 1
         const val SORT_RECIPE_PARAMETER = "sortRecipes"
+        const val SEARCH_TITLE_PARAMETER = "searchTitle"
     }
 }

@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.core.Single
 
 interface RecipeRepository {
     fun getRecipes(sortRecipes: SortRecipes): RecipePagingSource
+    fun searchRecipes(title: String, sortRecipes: SortRecipes): RecipePagingSource
     fun getRecipeInfo(id: Int): Observable<RecipeInfo>
     fun getFavoriteRecipes(): Flowable<List<Recipe>>
     fun getFavoriteRecipesInfo(id: Int): Single<RecipeInfo>
