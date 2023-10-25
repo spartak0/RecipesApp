@@ -25,7 +25,7 @@ class RecipeRepositoryImpl @Inject constructor(
 ) : RecipeRepository {
 
     override fun getRecipes(sortRecipes: SortRecipes): RecipePagingSource =
-        recipePagingSourceFactory.create(sortRecipes)
+        recipePagingSourceFactory.create(sortRecipes = sortRecipes)
 
     override fun getRecipeInfo(id: Int): Observable<RecipeInfo> =
         api.getRecipeInformation(id = id).map(RecipeInformationDto::toDomain)
@@ -41,4 +41,6 @@ class RecipeRepositoryImpl @Inject constructor(
         dao.deleteRecipe(recipe.toEntity())
 
     override fun isFavoriteRecipe(recipeId: Int): Single<Boolean> = dao.existsFavorite(recipeId)
+    override fun searchRecipes(title: String, sortRecipes: SortRecipes): RecipePagingSource =
+        recipePagingSourceFactory.create(searchTitle = title, sortRecipes = sortRecipes)
 }
