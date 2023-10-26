@@ -53,7 +53,8 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
     private fun setupListeners() {
         with(binding) {
             etSearch.addTextChangedListener {
-                viewModel.setSearchText(it.toString())
+                if (it.toString().isBlank()) viewModel.fetchFavoriteRecipes()
+                else viewModel.fetchSearchRecipes(it.toString())
             }
         }
     }
@@ -62,10 +63,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
         with(binding) {
             viewModel.favoriteRecipes.observe(viewLifecycleOwner) {
                 (rvRecipes.adapter as RecipeAdapter).update(it)
-            }
-            viewModel.searchText.observe(viewLifecycleOwner) {
-                if (it.isBlank()) viewModel.fetchFavoriteRecipes()
-                else viewModel.fetchSearchRecipes(it)
             }
         }
 

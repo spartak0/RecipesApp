@@ -14,9 +14,6 @@ class FavoriteViewModel @Inject constructor(
     private val _favoriteRecipes: MutableLiveData<List<Recipe>> = MutableLiveData()
     val favoriteRecipes: LiveData<List<Recipe>> = _favoriteRecipes
 
-    private val _searchText: MutableLiveData<String> = MutableLiveData()
-    val searchText: LiveData<String> = _searchText
-
     init {
         fetchFavoriteRecipes()
     }
@@ -50,7 +47,4 @@ class FavoriteViewModel @Inject constructor(
         recipeRepository.deleteFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
     }
 
-    fun setSearchText(text: String) {
-        _searchText.postValue(text)
-    }
 }
