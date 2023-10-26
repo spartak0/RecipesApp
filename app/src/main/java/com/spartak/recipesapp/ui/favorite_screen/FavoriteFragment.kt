@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -46,12 +47,25 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         setupObservable()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        with(binding) {
+            etSearch.addTextChangedListener {
+                viewModel.setSearchText(it.toString())
+            }
+        }
     }
 
     private fun setupObservable() {
         with(binding) {
             viewModel.favoriteRecipes.observe(viewLifecycleOwner) {
                 (rvRecipes.adapter as RecipeAdapter).update(it)
+            }
+            viewModel.searchText.observe(viewLifecycleOwner) {
+                if (it.isBlank()) viewModel.fetchFavoriteRecipes()
+                else viewModel.fetchSearchRecipes(it)
             }
         }
 

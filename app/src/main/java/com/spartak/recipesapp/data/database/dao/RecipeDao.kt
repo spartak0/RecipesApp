@@ -19,6 +19,9 @@ interface RecipeDao {
     @Query("SELECT * FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
     fun fetchRecipeInfoById(id: Int): Single<RecipeInfoEntity>
 
+    @Query("SELECT * FROM ${RecipeEntity.TABLE_NAME} WHERE ${RecipeEntity.TITLE_COLUMN} LIKE  '%' || :text || '%'")
+    fun searchRecipes(text: String): Flowable<List<RecipeEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRecipe(recipe: RecipeEntity): Single<Unit>
 
