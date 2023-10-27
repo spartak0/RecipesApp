@@ -17,7 +17,6 @@ data class RecipeInformationDto(
 
 data class IngredientDto(
     val id: Int,
-    val image: String,
     val name: String,
     val original: String,
     val amount: Double,

@@ -10,9 +10,12 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder()
+            .context(this.applicationContext)
+            .build()
     }
 }
+
 val Context.appComponent: AppComponent
     get() = when (this) {
         is App -> appComponent
