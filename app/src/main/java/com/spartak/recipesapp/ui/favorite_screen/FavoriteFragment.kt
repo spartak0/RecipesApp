@@ -31,8 +31,8 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
 
     private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecipeAdapter(recipeItemOnClick = { recipeId ->
-            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
-            findNavController().navigate(action)
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
+                findNavController().navigate(action)
         }, isFavoriteOnClick = { recipe, view ->
             isFavoriteOnClick(recipe, view as ImageView)
         })

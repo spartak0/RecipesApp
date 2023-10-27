@@ -13,11 +13,12 @@ class DetailsViewModel @Inject constructor(
     private val _recipeInfo = MutableLiveData<RecipeInfo>()
     val recipeInfo = _recipeInfo
 
-    fun fetchRecipeInfo(id: Int) {
+    fun fetchRecipeInfo(id: Int, onComplete:()->Unit) {
         recipeRepository.getRecipeInfo(id)
             .applySchedulers(
                 { _recipeInfo.value = it },
-                Throwable::printStackTrace
+                Throwable::printStackTrace,
+                onComplete,
             )
     }
 }
