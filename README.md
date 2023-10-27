@@ -4,3 +4,6 @@
 
 # Tech Stack
 XML, Room, Retrofit, RxJava, Dagger, LiveData, Glide, Paging
+
+# Preview
+![](preview.gif)
