@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
-        android:text="@string/saved_recype"
+        android:text="@string/saved_recipes"
         android:textFontWeight="700"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
             android:drawablePadding="10dp"
             android:maxLines="1"
             android:drawableTint="@color/search_icon_color"
-            android:hint="@string/search_saved_recype"
+            android:hint="@string/search_saved_recipe"
             android:paddingTop="0dp"
             android:paddingBottom="0dp" />
 
