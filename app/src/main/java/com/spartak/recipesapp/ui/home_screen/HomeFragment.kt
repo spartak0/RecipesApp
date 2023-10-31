@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -35,10 +36,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModelFactory
     }
 
+    private val dialog by lazy {
+        createCategoryDialog()
+    }
+
     private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecipePagingAdapter(
             recipeItemOnClick = { recipeId ->
-                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
                 findNavController().navigate(action)
             },
             isFavoriteOnClick = { recipe, view ->
@@ -68,11 +74,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val refreshState = loadStates.refresh
                 when (refreshState) {
                     is LoadState.Error -> {
-                        Snackbar.make(
-                            binding.root,
-                            refreshState.error.localizedMessage ?: "",
-                            Snackbar.LENGTH_LONG
-                        ).show()
+                        createSnackbar(refreshState.error.localizedMessage ?: "")
                         viewModel.setIsLoading(true)
                     }
 
@@ -87,9 +89,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupUI() {
-        with(binding.rvRecipes) {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = recipePagingAdapter
+        with(binding) {
+            rvRecipes.layoutManager = LinearLayoutManager(requireContext())
+            rvRecipes.adapter = recipePagingAdapter
+            tvViewAll.setOnClickListener {
+                dialog.show()
+            }
         }
     }
 
@@ -106,9 +111,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewModel.favoriteRecipes.observe(viewLifecycleOwner) { _ ->
                 (rvRecipes.adapter as RecipePagingAdapter).refresh()
             }
-
         }
-
     }
 
     private fun getSortRecipesByBtnId(checkedId: Int) =
@@ -127,17 +130,57 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             onSuccess = {
                 when (it) {
                     false -> {
-                        viewModel.addRecipeInDb(recipe.copy(isFavorite = true))
+                        viewModel.addRecipeInDb(
+                            recipe = recipe.copy(isFavorite = true),
+                            onError = { throwable ->
+                                createSnackbar(
+                                    throwable.localizedMessage ?: ""
+                                )
+                            })
                         view.setImageResource(R.drawable.save_filled)
                     }
 
                     true -> {
-                        viewModel.deleteRecipeInDb(recipe)
+                        viewModel.deleteRecipeInDb(
+                            recipe = recipe,
+                            onError = { throwable ->
+                                createSnackbar(
+                                    throwable.localizedMessage ?: ""
+                                )
+                            })
                         view.setImageResource(R.drawable.save)
                     }
                 }
             },
             onError = {},
         )
+    }
+
+    private fun createCategoryDialog(): AlertDialog {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.choose_sorting))
+        val sortList = SortRecipes.getSortingList()
+        val stringSortArray = sortList.map { it.value }.toTypedArray()
+        builder.setItems(stringSortArray) { _, which ->
+            val sorting = sortList[which]
+            viewModel.setSortRecipes(sorting)
+            when (sorting) {
+                SortRecipes.NONE -> binding.btnGroupCategory.check(binding.btnNew.id)
+                SortRecipes.Popularity -> binding.btnGroupCategory.check(binding.btnPopular.id)
+                SortRecipes.Random -> binding.btnGroupCategory.check(binding.btnRandom.id)
+                else -> {
+                    binding.btnGroupCategory.clearCheck()
+                }
+            }
+        }
+        return builder.create()
+    }
+
+    private fun createSnackbar(text: String) {
+        Snackbar.make(
+            binding.root,
+            text,
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 }

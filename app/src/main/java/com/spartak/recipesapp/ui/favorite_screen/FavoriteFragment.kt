@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -30,8 +31,8 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
 
     private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecipeAdapter(recipeItemOnClick = { recipeId ->
-            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
-            findNavController().navigate(action)
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
+                findNavController().navigate(action)
         }, isFavoriteOnClick = { recipe, view ->
             isFavoriteOnClick(recipe, view as ImageView)
         })
@@ -46,6 +47,16 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         setupObservable()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        with(binding) {
+            etSearch.addTextChangedListener {
+                if (it.toString().isBlank()) viewModel.fetchFavoriteRecipes()
+                else viewModel.fetchSearchRecipes(it.toString())
+            }
+        }
     }
 
     private fun setupObservable() {

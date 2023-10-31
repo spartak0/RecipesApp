@@ -24,8 +24,7 @@ class HomeViewModel @Inject constructor(
     private val _sortRecipes: MutableLiveData<SortRecipes> = MutableLiveData(SortRecipes.NONE)
     private val sortRecipes: LiveData<SortRecipes> = _sortRecipes
 
-    private val _searchText: MutableLiveData<String> = MutableLiveData("")
-    val searchText: LiveData<String> = _searchText
+    private val searchText: MutableLiveData<String> = MutableLiveData("")
 
     private val _isLoading = MutableLiveData(false)
     val isLoading = _isLoading
@@ -39,7 +38,7 @@ class HomeViewModel @Inject constructor(
         pagerMediator.addSource(sortRecipes) {
             pagerMediator.value = newPager(PagerState.Default(it))
         }
-        pagerMediator.addSource(searchText) {
+        pagerMediator.addSource(this.searchText) {
             pagerMediator.value = if (it.isBlank()) newPager(
                 PagerState.Default(
                     sortRecipes.value ?: SortRecipes.NONE
@@ -57,14 +56,17 @@ class HomeViewModel @Inject constructor(
             .cachedIn(this)
 
     init {
-        subscribeFavoriteRecipes()
+        subscribeFavoriteRecipes {}
     }
 
-    private fun subscribeFavoriteRecipes() {
+    private fun subscribeFavoriteRecipes(onError: (Throwable) -> Unit) {
         recipeRepository.getFavoriteRecipes()
-            .applySchedulers(onNext = {
-                _favoriteRecipes.value = it
-            })
+            .applySchedulers(
+                onNext = {
+                    _favoriteRecipes.value = it
+                },
+                onError = onError
+            )
     }
 
     private fun newPager(pagerState: PagerState): Pager<Int, Recipe> {
@@ -87,12 +89,14 @@ class HomeViewModel @Inject constructor(
         _isLoading.postValue(isLoading)
     }
 
-    fun addRecipeInDb(recipe: Recipe) {
-        recipeRepository.addFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    fun addRecipeInDb(recipe: Recipe, onError: (Throwable) -> Unit) {
+        recipeRepository.addFavoriteRecipe(recipe)
+            .applySchedulers(onSuccess = {}, onError = onError)
     }
 
-    fun deleteRecipeInDb(recipe: Recipe) {
-        recipeRepository.deleteFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    fun deleteRecipeInDb(recipe: Recipe, onError: (Throwable) -> Unit) {
+        recipeRepository.deleteFavoriteRecipe(recipe)
+            .applySchedulers(onSuccess = {}, onError = onError)
     }
 
     fun existRecipe(id: Int, onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) =
@@ -103,7 +107,7 @@ class HomeViewModel @Inject constructor(
             )
 
     fun setSearchText(text: String) {
-        _searchText.postValue(text)
+        this.searchText.postValue(text)
     }
 
     companion object {

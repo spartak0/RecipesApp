@@ -27,6 +27,9 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getRecipes(sortRecipes: SortRecipes): RecipePagingSource =
         recipePagingSourceFactory.create(sortRecipes = sortRecipes)
 
+    override fun searchRecipesInDB(title: String): Flowable<List<Recipe>> =
+        dao.searchRecipes(title).map { it.map(RecipeEntity::toDomain) }
+
     override fun getRecipeInfo(id: Int): Observable<RecipeInfo> =
         api.getRecipeInformation(id = id).map(RecipeInformationDto::toDomain)
 

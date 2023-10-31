@@ -18,8 +18,15 @@ class FavoriteViewModel @Inject constructor(
         fetchFavoriteRecipes()
     }
 
-    private fun fetchFavoriteRecipes() {
+    fun fetchFavoriteRecipes() {
         recipeRepository.getFavoriteRecipes()
+            .applySchedulers(onNext = {
+                _favoriteRecipes.value = it
+            })
+    }
+
+    fun fetchSearchRecipes(text: String) {
+        recipeRepository.searchRecipesInDB(text)
             .applySchedulers(onNext = {
                 _favoriteRecipes.value = it
             })
@@ -39,4 +46,5 @@ class FavoriteViewModel @Inject constructor(
     fun deleteRecipeInDb(recipe: Recipe) {
         recipeRepository.deleteFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
     }
+
 }
