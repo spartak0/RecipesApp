@@ -1,7 +1,6 @@
 package com.spartak.recipesapp.data.database.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -26,14 +25,18 @@ interface RecipeDao {
     @Query("DELETE FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
     fun deleteRecipeById(id: Int): Single<Unit>
 
-    @Delete
-    fun deleteRecipe(recipe: RecipeEntity): Single<Unit>
+    @Query("DELETE FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
+    fun deleteRecipe(id: Int): Single<Unit>
+
+    @Query("DELETE FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
+    fun deleteRecipeInfo(id: Int): Single<Unit>
+
 
     @Query("SELECT EXISTS (SELECT 1 FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN})")
     fun existsFavorite(id: Int): Single<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRecipeInfo(recipeInfo: RecipeInfoEntity): Single<Unit>
+    fun addRecipeInfo(recipeInfo: RecipeInfoEntity)
 
     @Query("DELETE FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
     fun deleteRecipeInfoById(id: Int): Single<Unit>

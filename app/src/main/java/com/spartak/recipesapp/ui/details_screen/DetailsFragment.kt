@@ -33,10 +33,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.fetchRecipeInfo(id = args.recipeId, onComplete = {
-            binding.svRecipe.visibility = View.VISIBLE
-            binding.pbRecipes.visibility = View.INVISIBLE
-        })
+        viewModel.fetchRecipeInfo(
+            id = args.recipeId,
+            needSync = args.fromFavorite,
+            onComplete = {
+                binding.svRecipe.visibility = View.VISIBLE
+                binding.pbRecipes.visibility = View.INVISIBLE
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

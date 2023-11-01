@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.spartak.recipesapp.R
 import com.spartak.recipesapp.app.appComponent
 import com.spartak.recipesapp.databinding.FragmentSavedBinding
@@ -31,8 +32,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
 
     private val recipePagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecipeAdapter(recipeItemOnClick = { recipeId ->
-                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
-                findNavController().navigate(action)
+            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(recipeId)
+            action.fromFavorite = true
+            findNavController().navigate(action)
         }, isFavoriteOnClick = { recipe, view ->
             isFavoriteOnClick(recipe, view as ImageView)
         })
@@ -81,17 +83,37 @@ class FavoriteFragment : Fragment(R.layout.fragment_saved) {
             onSuccess = {
                 when (it) {
                     false -> {
-                        viewModel.addRecipeInDb(recipe.copy(isFavorite = true))
+                        viewModel.addRecipeInDb(
+                            recipe = recipe.copy(isFavorite = true),
+                            onError = { throwable ->
+                                createSnackbar(
+                                    throwable.localizedMessage ?: ""
+                                )
+                            })
                         view.setImageResource(R.drawable.save_filled)
                     }
 
                     true -> {
-                        viewModel.deleteRecipeInDb(recipe)
+                        viewModel.deleteRecipeInDb(
+                            recipeId = recipe.id,
+                            onError = { throwable ->
+                                createSnackbar(
+                                    throwable.localizedMessage ?: ""
+                                )
+                            })
                         view.setImageResource(R.drawable.save)
                     }
                 }
             },
             onError = {},
         )
+    }
+
+    private fun createSnackbar(text: String) {
+        Snackbar.make(
+            binding.root,
+            text,
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 }

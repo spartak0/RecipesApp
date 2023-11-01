@@ -39,12 +39,14 @@ class FavoriteViewModel @Inject constructor(
                 onError = onError,
             )
 
-    fun addRecipeInDb(recipe: Recipe) {
-        recipeRepository.addFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    fun addRecipeInDb(recipe: Recipe, onError: (Throwable) -> Unit) {
+        recipeRepository.addFavoriteRecipe(recipe)
+            .applySchedulers(onSuccess = {}, onError = onError)
     }
 
-    fun deleteRecipeInDb(recipe: Recipe) {
-        recipeRepository.deleteFavoriteRecipe(recipe).applySchedulers(onSuccess = {}, onError = {})
+    fun deleteRecipeInDb(recipeId: Int, onError: (Throwable) -> Unit) {
+        recipeRepository.deleteFavoriteRecipe(recipeId)
+            .applySchedulers(onNext = {}, onError = onError)
     }
 
 }

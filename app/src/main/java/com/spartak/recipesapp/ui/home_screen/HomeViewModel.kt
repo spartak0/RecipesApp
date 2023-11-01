@@ -94,9 +94,9 @@ class HomeViewModel @Inject constructor(
             .applySchedulers(onSuccess = {}, onError = onError)
     }
 
-    fun deleteRecipeInDb(recipe: Recipe, onError: (Throwable) -> Unit) {
-        recipeRepository.deleteFavoriteRecipe(recipe)
-            .applySchedulers(onSuccess = {}, onError = onError)
+    fun deleteRecipeInDb(recipeId: Int, onError: (Throwable) -> Unit) {
+        recipeRepository.deleteFavoriteRecipe(recipeId)
+            .applySchedulers(onNext = {}, onError = onError)
     }
 
     fun existRecipe(id: Int, onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) =
