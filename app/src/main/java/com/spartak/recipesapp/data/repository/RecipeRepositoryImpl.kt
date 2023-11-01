@@ -9,13 +9,15 @@ import com.spartak.recipesapp.data.paging.RecipePagingSource
 import com.spartak.recipesapp.domain.mapper.recipe.toDomain
 import com.spartak.recipesapp.domain.mapper.recipe.toEntity
 import com.spartak.recipesapp.domain.mapper.recipeInfo.toDomain
+import com.spartak.recipesapp.domain.mapper.recipeInfo.toEntity
 import com.spartak.recipesapp.domain.model.Recipe
 import com.spartak.recipesapp.domain.model.RecipeInfo
 import com.spartak.recipesapp.domain.model.SortRecipes
 import com.spartak.recipesapp.domain.repository.RecipeRepository
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -30,14 +32,26 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun searchRecipesInDB(title: String): Flowable<List<Recipe>> =
         dao.searchRecipes(title).map { it.map(RecipeEntity::toDomain) }
 
-    override fun getRecipeInfo(id: Int): Observable<RecipeInfo> =
-        api.getRecipeInformation(id = id).map(RecipeInformationDto::toDomain)
+    override fun getRecipeInfo(id: Int): Single<RecipeInfo> =
+        dao.existsRecipeInfoFavorite(id).flatMap {
+            if (it) {
+                dao.fetchRecipeInfoById(id)
+                    .map(RecipeInfoEntity::toDomain)
+            } else {
+                api.getRecipeInformation(id)
+                    .single(RecipeInformationDto(0, "", "", "", emptyList()))
+                    .map { recipeInfoDto ->
+                        dao.addRecipeInfo(recipeInfoDto.toEntity())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe()
+                        recipeInfoDto.toDomain()
+                    }
+            }
+        }
 
     override fun getFavoriteRecipes(): Flowable<List<Recipe>> =
         dao.fetchRecipes().map { it.map(RecipeEntity::toDomain) }
-
-    override fun getFavoriteRecipesInfo(id: Int): Single<RecipeInfo> =
-        dao.fetchRecipeInfoById(id).map(RecipeInfoEntity::toDomain)
 
     override fun addFavoriteRecipe(recipe: Recipe): Single<Unit> = dao.addRecipe(recipe.toEntity())
     override fun deleteFavoriteRecipe(recipe: Recipe): Single<Unit> =

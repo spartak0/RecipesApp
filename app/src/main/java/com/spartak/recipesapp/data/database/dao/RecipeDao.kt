@@ -16,11 +16,9 @@ interface RecipeDao {
     @Query("SELECT * FROM ${RecipeEntity.TABLE_NAME}")
     fun fetchRecipes(): Flowable<List<RecipeEntity>>
 
-    @Query("SELECT * FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
-    fun fetchRecipeInfoById(id: Int): Single<RecipeInfoEntity>
-
     @Query("SELECT * FROM ${RecipeEntity.TABLE_NAME} WHERE ${RecipeEntity.TITLE_COLUMN} LIKE  '%' || :text || '%'")
     fun searchRecipes(text: String): Flowable<List<RecipeEntity>>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRecipe(recipe: RecipeEntity): Single<Unit>
@@ -33,4 +31,16 @@ interface RecipeDao {
 
     @Query("SELECT EXISTS (SELECT 1 FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN})")
     fun existsFavorite(id: Int): Single<Boolean>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addRecipeInfo(recipeInfo: RecipeInfoEntity): Single<Unit>
+
+    @Query("DELETE FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
+    fun deleteRecipeInfoById(id: Int): Single<Unit>
+
+    @Query("SELECT * FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
+    fun fetchRecipeInfoById(id: Int): Single<RecipeInfoEntity>
+
+    @Query("SELECT EXISTS (SELECT 1 FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN})")
+    fun existsRecipeInfoFavorite(id: Int): Single<Boolean>
 }
