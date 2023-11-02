@@ -2,8 +2,8 @@ package com.spartak.recipesapp.ui
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -17,15 +17,6 @@ open class DisposableViewModel : ViewModel() {
         disposable.dispose()
         super.onCleared()
     }
-
-    fun <T : Any> Observable<T>.applySchedulers(
-        onNext: (T) -> Unit,
-        onError: (Throwable) -> Unit = {},
-        onComplete: () -> Unit = {},
-    ) = this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(onNext, onError, onComplete)
-        .addToContainer()
 
     fun <T : Any> Single<T>.applySchedulers(
         onSuccess: (T) -> Unit,
@@ -42,6 +33,15 @@ open class DisposableViewModel : ViewModel() {
     ) = this
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(onNext,onError,onComplete)
+        .addToContainer()
+
+    fun Completable.applySchedulers(
+        onComplete: () -> Unit,
+        onError: (Throwable) -> Unit = {},
+    ) = this
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(onComplete,onError)
         .addToContainer()
 
     private fun Disposable.addToContainer() = disposable.add(this)

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.spartak.recipesapp.data.database.entity.RecipeEntity
 import com.spartak.recipesapp.data.database.entity.RecipeInfoEntity
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
@@ -20,26 +21,20 @@ interface RecipeDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRecipe(recipe: RecipeEntity): Single<Unit>
+    fun addRecipe(recipe: RecipeEntity): Completable
 
     @Query("DELETE FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
-    fun deleteRecipeById(id: Int): Single<Unit>
-
-    @Query("DELETE FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
-    fun deleteRecipe(id: Int): Single<Unit>
+    fun deleteRecipe(id: Int): Completable
 
     @Query("DELETE FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN}")
-    fun deleteRecipeInfo(id: Int): Single<Unit>
+    fun deleteRecipeInfo(id: Int): Completable
 
 
     @Query("SELECT EXISTS (SELECT 1 FROM ${RecipeEntity.TABLE_NAME} WHERE :id = ${RecipeEntity.ID_COLUMN})")
     fun existsFavorite(id: Int): Single<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRecipeInfo(recipeInfo: RecipeInfoEntity)
-
-    @Query("DELETE FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
-    fun deleteRecipeInfoById(id: Int): Single<Unit>
+    fun addRecipeInfo(recipeInfo: RecipeInfoEntity): Completable
 
     @Query("SELECT * FROM ${RecipeInfoEntity.TABLE_NAME} WHERE :id = ${RecipeInfoEntity.ID_COLUMN}")
     fun fetchRecipeInfoById(id: Int): Single<RecipeInfoEntity>

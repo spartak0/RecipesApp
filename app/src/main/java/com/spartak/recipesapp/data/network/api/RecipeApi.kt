@@ -2,7 +2,7 @@ package com.spartak.recipesapp.data.network.api
 
 import com.spartak.recipesapp.data.network.dto.RecipeInformationDto
 import com.spartak.recipesapp.data.network.dto.RecipeResponseDto
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -15,13 +15,13 @@ interface RecipeApi {
         @Query(SORT_PARAMETER) sort: String = "",
         @Query(NUMBER_PARAMETER) number: Int = MAX_PAGE_SIZE_VALUE,
         @Query(OFFSET_PARAMETER) offset: Int = 0,
-    ): Observable<RecipeResponseDto>
+    ): Single<RecipeResponseDto>
 
     @GET(RECIPE_INFORMATION_ENDPOINT)
     fun getRecipeInformation(
         @Path(ID_PARAMETER) id: Int,
         @Query(INCLUDE_NUTRITION_PARAMETER) includeNutrition: Boolean = false,
-    ): Observable<RecipeInformationDto>
+    ): Single<RecipeInformationDto>
 
     @GET(SEARCH_RECIPE_ENDPOINT)
     fun searchRecipes(
@@ -30,7 +30,7 @@ interface RecipeApi {
         @Query(SORT_PARAMETER) sort: String = "",
         @Query(NUMBER_PARAMETER) number: Int = MAX_PAGE_SIZE_VALUE,
         @Query(OFFSET_PARAMETER) offset: Int = 0,
-    ): Observable<RecipeResponseDto>
+    ): Single<RecipeResponseDto>
 
     companion object {
         const val BASE_URL = "https://api.spoonacular.com/"

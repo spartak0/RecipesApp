@@ -14,8 +14,8 @@ import com.spartak.recipesapp.domain.model.Recipe
 import com.spartak.recipesapp.domain.model.RecipeInfo
 import com.spartak.recipesapp.domain.model.SortRecipes
 import com.spartak.recipesapp.domain.repository.RecipeRepository
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -33,7 +33,6 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override fun getRecipeInfo(id: Int): Single<RecipeInfo> =
         api.getRecipeInformation(id = id)
-            .single(RecipeInformationDto(0, "", "", "", emptyList()))
             .map(RecipeInformationDto::toDomain)
 
     override fun getSyncRecipeInfo(id: Int): Single<RecipeInfo> =
@@ -43,10 +42,9 @@ class RecipeRepositoryImpl @Inject constructor(
                     .map(RecipeInfoEntity::toDomain)
             } else {
                 api.getRecipeInformation(id)
-                    .single(RecipeInformationDto(0, "", "", "", emptyList()))
-                    .map { recipeInfoDto ->
-                        dao.addRecipeInfo(recipeInfoDto.toEntity())
-                        recipeInfoDto.toDomain()
+                    .map(RecipeInformationDto::toDomain)
+                    .flatMap { info ->
+                        dao.addRecipeInfo(info.toEntity()).toSingleDefault(info)
                     }
             }
         }
@@ -54,12 +52,9 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getFavoriteRecipes(): Flowable<List<Recipe>> =
         dao.fetchRecipes().map { it.map(RecipeEntity::toDomain) }
 
-    override fun addFavoriteRecipe(recipe: Recipe): Single<Unit> = dao.addRecipe(recipe.toEntity())
-    override fun deleteFavoriteRecipe(id: Int): Observable<Unit> =
-        Single.merge(
-            dao.deleteRecipe(id),
-            dao.deleteRecipeInfo(id)
-        ).toObservable()
+    override fun addFavoriteRecipe(recipe: Recipe): Completable = dao.addRecipe(recipe.toEntity())
+    override fun deleteFavoriteRecipe(id: Int): Completable =
+        dao.deleteRecipe(id).andThen(dao.deleteRecipeInfo(id))
 
     override fun isFavoriteRecipe(recipeId: Int): Single<Boolean> = dao.existsFavorite(recipeId)
     override fun searchRecipes(title: String, sortRecipes: SortRecipes): RecipePagingSource =
