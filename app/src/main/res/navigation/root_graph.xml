@@ -33,5 +33,9 @@
         <argument
             android:name="recipeId"
             app:argType="integer" />
+        <argument
+            android:name="fromFavorite"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 </navigation>

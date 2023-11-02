@@ -142,7 +142,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     true -> {
                         viewModel.deleteRecipeInDb(
-                            recipe = recipe,
+                            recipeId = recipe.id,
                             onError = { throwable ->
                                 createSnackbar(
                                     throwable.localizedMessage ?: ""

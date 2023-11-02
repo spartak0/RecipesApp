@@ -42,7 +42,7 @@ class RecipePagingSource @AssistedInject constructor(
             number = pageSize,
         )
 
-        return response.single(RecipeResponseDto())
+        return response
             .flatMap(::checkIsFavorite)
             .map { toLoadResult(it, pageNumber) }
             .onErrorReturn { LoadResult.Error(it) }
